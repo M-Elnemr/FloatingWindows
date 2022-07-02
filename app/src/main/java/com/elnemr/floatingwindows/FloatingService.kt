@@ -31,11 +31,12 @@ class FloatingService : Service() {
                     if (!drawOverOtherAppsEnabled()) {
                         startPermissionActivity()
                     } else {
-                        Toast.makeText(
-                            this,
-                            "Floating window to be added in the next lessons.",
-                            Toast.LENGTH_SHORT
-                        ).show()
+//                        Toast.makeText(
+//                            this,
+//                            "Floating window to be added in the next lessons.",
+//                            Toast.LENGTH_SHORT
+//                        ).show()
+                    FloatingWindow(this).open()
                     }
                 }
                 Constants.SERVICE_START -> startFloatingService()
