@@ -9,7 +9,7 @@ import java.util.*
 import kotlin.concurrent.timerTask
 import kotlin.math.hypot
 
-class DraggableTouchHelper(
+class DraggableTouchListener(
     context: Context,
     private val view: View,
     private val initialPosition: () -> Point,

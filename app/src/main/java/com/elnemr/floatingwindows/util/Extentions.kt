@@ -2,8 +2,10 @@ package com.elnemr.floatingwindows.util
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Point
 import android.os.Build
 import android.provider.Settings
+import android.view.View
 import com.elnemr.floatingwindows.FloatingService
 import com.elnemr.floatingwindows.PermissionActivity
 
@@ -36,4 +38,11 @@ fun Context.startPermissionActivity() {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK
         }
     )
+}
+
+fun View.registerDraggableTouchListener(
+    initialPosition: () -> Point,
+    positionListener: (x: Int, y: Int) -> Unit
+) {
+    DraggableTouchListener(context, this, initialPosition, positionListener)
 }

@@ -2,14 +2,15 @@ package com.elnemr.floatingwindows
 
 import android.content.Context
 import android.graphics.PixelFormat
+import android.graphics.Point
 import android.os.Build
-import android.system.Os.close
 import android.util.DisplayMetrics
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
+import com.elnemr.floatingwindows.util.registerDraggableTouchListener
 
 class FloatingWindow(private val context: Context) {
 
@@ -53,6 +54,16 @@ class FloatingWindow(private val context: Context) {
         params.y = (dm.heightPixels - params.height) / 2
     }
 
+    private fun setPosition(x: Int, y: Int) {
+        windowParams.x = x
+        windowParams.y = y
+        update()
+    }
+
+    private fun update() {
+        windowManager.updateViewLayout(rootView, windowParams)
+    }
+
     private fun initWindowParams() {
         calculateSizeAndPosition(windowParams, 300, 80)
     }
@@ -63,6 +74,10 @@ class FloatingWindow(private val context: Context) {
         rootView.findViewById<View>(R.id.content_button).setOnClickListener {
             Toast.makeText(context, "Adding notes to be implemented.", Toast.LENGTH_SHORT).show()
         }
+        rootView.findViewById<View>(R.id.window_header).registerDraggableTouchListener(
+            initialPosition = { Point(windowParams.x, windowParams.y) },
+            positionListener = { x, y -> setPosition(x, y) }
+        )
     }
 
     init {
