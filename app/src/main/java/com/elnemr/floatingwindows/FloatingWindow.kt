@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
+import com.elnemr.floatingwindows.layout.WindowContentLayout
 import com.elnemr.floatingwindows.util.registerDraggableTouchListener
 
 class FloatingWindow(private val context: Context) {
@@ -17,7 +18,7 @@ class FloatingWindow(private val context: Context) {
     private val windowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
     private val layoutInflater =
         context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-    private val rootView = layoutInflater.inflate(R.layout.floating_layout, null)
+    private val rootView = layoutInflater.inflate(R.layout.floating_layout, null) as WindowContentLayout
 
     private val windowParams = WindowManager.LayoutParams(
         0,
@@ -78,6 +79,11 @@ class FloatingWindow(private val context: Context) {
             initialPosition = { Point(windowParams.x, windowParams.y) },
             positionListener = { x, y -> setPosition(x, y) }
         )
+
+        rootView.setWindowListener {
+            if (it) enableKeyboard()
+            else disableKeyboard()
+        }
     }
 
     init {
@@ -102,4 +108,20 @@ class FloatingWindow(private val context: Context) {
             // warning for the user here.
         }
     }
+
+    private fun enableKeyboard() {
+        if (windowParams.flags and WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE != 0) {
+            windowParams.flags = windowParams.flags and WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE.inv()
+            update()
+        }
+    }
+
+
+    private fun disableKeyboard() {
+        if (windowParams.flags and WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE == 0) {
+            windowParams.flags = windowParams.flags or WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+            update()
+        }
+    }
+
 }
