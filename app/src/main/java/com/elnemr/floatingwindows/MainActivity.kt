@@ -38,10 +38,8 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private suspend fun updateAdapter(notes: List<NoteEntity>) {
-
+    private fun updateAdapter(notes: List<NoteEntity>) {
         Toast.makeText(this@MainActivity, "${notes.size}", Toast.LENGTH_SHORT).show()
-
     }
 
 
