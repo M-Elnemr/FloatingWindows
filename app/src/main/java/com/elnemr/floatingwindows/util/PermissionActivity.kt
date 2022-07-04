@@ -1,4 +1,4 @@
-package com.elnemr.floatingwindows
+package com.elnemr.floatingwindows.util
 
 import android.content.Intent
 import android.net.Uri
@@ -9,9 +9,7 @@ import android.widget.Button
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import com.elnemr.floatingwindows.util.Constants
-import com.elnemr.floatingwindows.util.drawOverOtherAppsEnabled
-import com.elnemr.floatingwindows.util.startFloatingService
+import com.elnemr.floatingwindows.R
 
 const val PERMISSION_REQUEST_CODE = 1
 

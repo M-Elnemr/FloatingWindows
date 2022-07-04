@@ -1,4 +1,4 @@
-package com.elnemr.floatingwindows
+package com.elnemr.floatingwindows.service
 
 import android.app.*
 import android.content.Context
@@ -9,6 +9,8 @@ import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
+import com.elnemr.floatingwindows.FloatingWindow
+import com.elnemr.floatingwindows.R
 import com.elnemr.floatingwindows.util.Constants
 import com.elnemr.floatingwindows.util.drawOverOtherAppsEnabled
 import com.elnemr.floatingwindows.util.startPermissionActivity

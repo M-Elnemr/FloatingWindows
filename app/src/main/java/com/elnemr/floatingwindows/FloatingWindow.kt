@@ -66,7 +66,7 @@ class FloatingWindow(private val context: Context) {
     }
 
     private fun initWindowParams() {
-        calculateSizeAndPosition(windowParams, 300, 80)
+        calculateSizeAndPosition(windowParams, 300, 160)
     }
 
     private fun initWindow() {

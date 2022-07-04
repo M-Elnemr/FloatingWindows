@@ -9,6 +9,9 @@ object Constants {
     const val CHANNEL_ID = "my_channel"
     const val CHANNEL_NAME = "CHANNEL_NAME"
 
+    const val NOTE_TABLE_NAME = "note_table"
+    const val DATABASE_NAME = "note_database"
+
     const val CODE_EXIT_INTENT = 2
     const val CODE_NOTE_INTENT = 3
 }
