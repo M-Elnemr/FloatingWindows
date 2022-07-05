@@ -6,7 +6,6 @@ import android.content.Intent
 import android.os.Build
 import android.os.IBinder
 import android.util.Log
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import com.elnemr.floatingwindows.FloatingWindow
@@ -14,8 +13,14 @@ import com.elnemr.floatingwindows.R
 import com.elnemr.floatingwindows.util.Constants
 import com.elnemr.floatingwindows.util.drawOverOtherAppsEnabled
 import com.elnemr.floatingwindows.util.startPermissionActivity
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class FloatingService : Service() {
+
+    @Inject
+    lateinit var floatingWindow: FloatingWindow
 
     override fun onBind(p0: Intent?): IBinder? = null
 
@@ -38,7 +43,7 @@ class FloatingService : Service() {
 //                            "Floating window to be added in the next lessons.",
 //                            Toast.LENGTH_SHORT
 //                        ).show()
-                    FloatingWindow(this).open()
+                        floatingWindow.open()
                     }
                 }
                 Constants.SERVICE_START -> startFloatingService()

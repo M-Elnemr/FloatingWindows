@@ -1,11 +1,12 @@
 package com.elnemr.floatingwindows
 
 import android.os.Bundle
-import android.widget.Button
-import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import com.elnemr.floatingwindows.adapter.base.OnItemClickInterface
+import com.elnemr.floatingwindows.adapter.run.NoteAdapter
+import com.elnemr.floatingwindows.databinding.ActivityMainBinding
 import com.elnemr.floatingwindows.db.NoteEntity
 import com.elnemr.floatingwindows.util.Constants
 import com.elnemr.floatingwindows.util.startFloatingService
@@ -17,17 +18,26 @@ import kotlinx.coroutines.flow.buffer
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), OnItemClickInterface{
 
     private val viewModel by viewModels<NoteViewModel>()
+    private lateinit var binding: ActivityMainBinding
+    private lateinit var adapter: NoteAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         startFloatingService(Constants.SERVICE_START)
 
+        initAdapter()
         initViews()
         loadNotes()
+    }
+
+    private fun initAdapter() {
+        adapter = NoteAdapter(this)
+        binding.rvNotes.adapter = adapter
     }
 
     private fun loadNotes() {
@@ -39,14 +49,17 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updateAdapter(notes: List<NoteEntity>) {
-        Toast.makeText(this@MainActivity, "${notes.size}", Toast.LENGTH_SHORT).show()
+        adapter.setDataList(notes)
     }
 
-
     private fun initViews() {
-        findViewById<Button>(R.id.btn_send).setOnClickListener {
-            viewModel.insertNote(findViewById<EditText>(R.id.et_note).text.toString())
+        binding.btnSend.setOnClickListener {
+            viewModel.insertNote(binding.etNote.text.toString())
         }
+    }
+
+    override fun onDeleteClicked(note: NoteEntity) {
+        viewModel.deleteNote(note)
     }
 
 }

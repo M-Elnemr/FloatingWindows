@@ -9,16 +9,27 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager
-import android.widget.Toast
+import android.widget.EditText
+import com.elnemr.floatingwindows.db.NoteEntity
 import com.elnemr.floatingwindows.layout.WindowContentLayout
+import com.elnemr.floatingwindows.repo.Repo
 import com.elnemr.floatingwindows.util.registerDraggableTouchListener
+import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class FloatingWindow(private val context: Context) {
+class FloatingWindow @Inject constructor(
+    @ApplicationContext private val context: Context,
+    private val repo: Repo
+) {
 
     private val windowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
     private val layoutInflater =
         context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-    private val rootView = layoutInflater.inflate(R.layout.floating_layout, null) as WindowContentLayout
+    private val rootView =
+        layoutInflater.inflate(R.layout.floating_layout, null) as WindowContentLayout
 
     private val windowParams = WindowManager.LayoutParams(
         0,
@@ -73,7 +84,10 @@ class FloatingWindow(private val context: Context) {
         // Using kotlin extension for views caused error, so good old findViewById is used
         rootView.findViewById<View>(R.id.window_close).setOnClickListener { close() }
         rootView.findViewById<View>(R.id.content_button).setOnClickListener {
-            Toast.makeText(context, "Adding notes to be implemented.", Toast.LENGTH_SHORT).show()
+
+            CoroutineScope(Dispatchers.IO).launch {
+                repo.insertNote(NoteEntity(rootView.findViewById<EditText>(R.id.content_text).text.toString()))
+            }
         }
         rootView.findViewById<View>(R.id.window_header).registerDraggableTouchListener(
             initialPosition = { Point(windowParams.x, windowParams.y) },
@@ -111,7 +125,8 @@ class FloatingWindow(private val context: Context) {
 
     private fun enableKeyboard() {
         if (windowParams.flags and WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE != 0) {
-            windowParams.flags = windowParams.flags and WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE.inv()
+            windowParams.flags =
+                windowParams.flags and WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE.inv()
             update()
         }
     }
